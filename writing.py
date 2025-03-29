@@ -70,8 +70,6 @@ def reedsolo_encode(data: bytes) -> str:
     # Encode data using Reed-Solomon
     encoded_data = rs.encode(data)
 
-    print("len encoded_data:", len(encoded_data))
-    print("len(data):", len(data))
 
     return encoded_data
 

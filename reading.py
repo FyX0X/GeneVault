@@ -7,9 +7,6 @@ from writing import DATA_SIZE, ERROR_CORRECTION_SIZE
 rs = reedsolo.RSCodec(ERROR_CORRECTION_SIZE)  # 33% error correction bytes
 
 
-verbose = False  # Set to True for verbose output
-
-
 def read_dna_strands(dna_str: str) -> list:
     """Read the DNA strands from the given DNA string."""
     assert dna_str.startswith("ACAC") and dna_str.endswith("AGAG"), "Invalid DNA string format."
@@ -30,22 +27,13 @@ def read_dna_strands(dna_str: str) -> list:
 
     data = rs.decode(encoded_data)  # Decode the Reed-Solomon encoded data
 
-
-    if verbose:
-        print(f"Decoded data: {data}")
-        print(f"Owner ID: {owner_id}")
-        print(f"File ID: {file_id}")
-        print(f"Index: {index}")
-        print(f"Checksum: {checksum}")
-        print(f"Data: {translator.bytes_to_text(data[0])}")
-
-
     return {
         "owner_id": owner_id,
         "file_id": file_id,
         "index": index,
         "data": data[0],  # First part of the decoded data
     }
+
 
 def verify_checksum(data: bytes, checksum: bytes) -> bool:
     """Verify the checksum of the given data."""
