@@ -1,44 +1,47 @@
-from Crypto.Cipher import AES
-from Crypto.Util.Padding import pad, unpad
-from Crypto.Random import get_random_bytes
-import os
+import os 
+import numpy as np
 
-#Génération d'une clé AES-256 et d'un IV (vecteur d'initialisation)
-def generate_key_iv():
-    key = get_random_bytes(32)  # Clé AES-256 (32 octets)
-    iv = get_random_bytes(16)   # IV (16 octets)
-    return key, iv
+def createkey():
+    key = os.urandom(16) 
+    return key
 
-#Fonction pour chiffrer un fichier avec AES-256-CBC
-def encrypt_file(input_file, output_file, key, iv):
-    cipher = AES.new(key, AES.MODE_CBC, iv)
-    
-    with open(input_file, 'rb') as f:
-        plaintext = f.read()
-    
-    ciphertext = cipher.encrypt(pad(plaintext, AES.block_size))  # Padding pour un multiple de 16
+def NERM_encrypting(key, file): 
+    matrix_key = np.array(list(key)).reshape(4,4)
+    det_key = np.linalg.det(matrix_key)
+    crypted_data = []
+    with open(file, 'rb') as f:
+        data = f.read()
+    if len(data)%16 != 0:
+        data += b'\x00' * (16 - len(data) % 16) 
+    for i in range(len(data)//16):
+        liste = data[(i*16):((i*16)+16)]
+        matrix = np.array(list(liste), dtype=np.uint8).reshape(4,4)
+        print(matrix)
+        matrix = det_key*matrix
+        matrix = matrix @ matrix_key
+        for i in range(4):
+            for j in range(4):
+                crypted_data.append(matrix[i][j].tobytes())
+    return crypted_data
 
-    with open(output_file, 'wb') as f:
-        f.write(iv + ciphertext)  # On stocke l'IV au début du fichier
 
-    print(f"✅ Fichier chiffré enregistré sous {output_file}")
 
-# 🔹 Fonction pour déchiffrer un fichier avec AES-256-CBC
-def decrypt_file(input_file, output_file, key):
-    with open(input_file, 'rb') as f:
-        iv = f.read(16)  # Lire l'IV stocké au début du fichier
-        ciphertext = f.read()
-    
-    cipher = AES.new(key, AES.MODE_CBC, iv)
-    plaintext = unpad(cipher.decrypt(ciphertext), AES.block_size)
+def NERM_decrypting(key, crypted_data):
+    decrypted_data = []
+    matrix_key = np.array(list(key)).reshape(4,4)
+    matrix_key_inv = np.linalg.inv(matrix_key)
+    det_key = np.linalg.det(matrix_key)
+    for i in range(len(crypted_data)//16):
+        liste = crypted_data[(i*16):((i*16)+16)]
+        matrix = np.array(list(liste), dtype= np.uint8).reshape(4,4)
+        matrix = matrix @ matrix_key_inv
+        matrix = matrix / det_key
+        for i in range(4):
+            for j in range(4):
+                decrypted_data.append(matrix[i][j].tobytes())
+    with open(decrypted_file, 'wb') as f:
+        f.write(decrypted_data)
+    return
 
-    with open(output_file, 'wb') as f:
-        f.write(plaintext)
-
-    print(f"✅ Fichier déchiffré enregistré sous {output_file}")
-
-# 🔹 Exemple d'utilisation
-key, iv = generate_key_iv()  # Génération de la clé et de l'IV
-
-encrypt_file("File.txt", "fichier_chiffre.aes", key, iv)  # Chiffrement
-decrypt_file("fichier_chiffre.aes", "fichier_dechiffre.txt", key)  # Déchiffrement
+key = createkey()
+NERM_decrypting(key, NERM_encrypting(key,"File.txt"))
