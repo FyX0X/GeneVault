@@ -18,6 +18,8 @@ print("What file do you want to put in the time capsule ?")
 input_file = input("Path: ")
 print("Where do you want your encrypted file ?")
 output_file = input("Path: ")
+print("what is the name of your file ?")
+output = input("Name: ")
 print("Send us the .dna file and we will store it!")
 
 path = input_file
@@ -29,7 +31,7 @@ for i in range(len(sliced)):
     # The owner_id, file_id, and index are set to 1 for this example
     # You can change them as needed
     writed.append( writing.write_dna_strand(1, 1, i, sliced[i]))
-with open ("file.dna", "w")as file:
+with open (output, "w")as file:
     for i in writed:
         file.write(i)
         file.write("\n")
