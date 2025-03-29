@@ -32,8 +32,6 @@ def read_dna_strands(dna_str: str) -> list:
     
     try:
         data = rs.decode(encoded_data)
-        print(f"Decoded: {data}")
-        print(f"Decoded (text): {translator.bytes_to_text(data[0])}")
     except reedsolo.ReedSolomonError as e:
         print(f"Error during decoding: {e}")
 
