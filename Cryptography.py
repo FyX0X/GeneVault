@@ -31,8 +31,10 @@ def decrypt_file(key, input_file, output_file):
     decrypted_data = unpad(cipher.decrypt(encrypted_data), AES.block_size)
     with open(output_file, 'wb') as f:
         f.write(decrypted_data)
-    
-# Example usage
-key = create_key()
-encrypt_file(key, 'File.txt', 'EncryptedFile.txt')
-decrypt_file(key, 'EncryptedFile.txt', 'DecryptedFile.xt')
+
+
+if __name__ == "__main__":    
+    # Example usage
+    key = create_key()
+    encrypt_file(key, 'File.txt', 'EncryptedFile.txt')
+    decrypt_file(key, 'EncryptedFile.txt', 'DecryptedFile.xt')
