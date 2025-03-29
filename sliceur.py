@@ -1,7 +1,4 @@
-def sliceur(file, n=10):
-    with open(file, 'rb') as f:  
-        data = f.read()
-
+def sliceur(data, n=10):
     long = len(data)
     nslice = (long + n - 1) // n  
 
