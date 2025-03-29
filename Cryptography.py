@@ -32,7 +32,7 @@ def decrypt_file(key, encrypted_file, output_file):
     with open(output_file, 'wb') as f:
         f.write(decrypted_data)
     
-# Example usage
-key = create_key()
-encrypt_file(key, 'File.txt', 'EncryptedFile.txt')
-decrypt_file(key, 'EncryptedFile.txt', 'DecryptedFile.xt')
+if __name__ == "__main__":
+    key = create_key()
+    encrypt_file(key, 'File.txt', 'EncryptedFile.txt')
+    decrypt_file(key, 'EncryptedFile.txt', 'DecryptedFile.xt')
