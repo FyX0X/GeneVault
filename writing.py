@@ -1,18 +1,23 @@
-def write(filename: str, crypto_method: str, data: str) -> str:
-    output = ""
-    output += "AAAA"
+import translator
 
 
-def text_to_bytes(text: str) -> bytes:
-
-    binary = bytes(text, "utf-8")
-    return binary
-
-
-def bytes_to_base_4(input_byte: bytes) -> str:
-    binary_str = ''.join(format(byte, '08b') for byte in input_byte)
-    if len(binary_str) % 2 != 0:
-        binary_str = '0' + binary_str
+def write(filename: str, crypto_method: str, data: bytes) -> str:
+    output = "AAAA"
+    output += translator.bytes_to_adn(data)
 
 
-print(text_to_binary("hello"))
+def mirror_adn(adn_str: str) -> str:
+    """Mirror the ADN string."""
+    
+    
+    reversed = adn_str[::-1]
+    mirror_adn = ""
+    
+    
+    # Reverse the second half
+    mirrored_second_half = second_half[::-1]
+    
+    # Concatenate the first half and the mirrored second half
+    mirrored_adn = first_half + mirrored_second_half
+    
+    return mirrored_adn
