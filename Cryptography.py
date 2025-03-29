@@ -2,9 +2,11 @@ from Crypto.Cipher import AES
 from Crypto.Util.Padding import pad, unpad
 import os 
 
+
 def create_key():
     """ Creates a random key 16 bytes long"""
     return os.urandom(16)
+
 
 def encrypt_file(key, input_file, encrypted_file):
     """Encrypts input_file with AES-256 CBC mode
@@ -19,6 +21,7 @@ def encrypt_file(key, input_file, encrypted_file):
     with open(encrypted_file, 'wb') as f:
         f.write(iv + encrypted_data)  # Save IV + ciphertext
 
+
 def decrypt_file(key, encrypted_file, output_file):
     """Decrypts encrypted_file with AES-256 CBC mode
     Args:
@@ -31,6 +34,7 @@ def decrypt_file(key, encrypted_file, output_file):
     decrypted_data = unpad(cipher.decrypt(encrypted_data), AES.block_size)
     with open(output_file, 'wb') as f:
         f.write(decrypted_data)
+    
     
 if __name__ == "__main__":
     key = create_key()

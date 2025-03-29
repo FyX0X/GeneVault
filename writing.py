@@ -77,6 +77,7 @@ def reedsolo_encode(data: bytes) -> str:
 def checksum_crc32(owner: bytes, file: bytes, index: bytes, encoded_data: bytes) -> bytes:
     """ Calculate the CRC32 checksum of the data. and truncaste it to 2 bytes."""
     data = owner + file + index + encoded_data
+    print("checksum data:", data)
     cs = (zlib.crc32(data) & 0xFFFF).to_bytes(2, byteorder="big", signed=False)  # 2 bytes (8 pairs) 
     return cs
 
@@ -85,7 +86,7 @@ if __name__ == "__main__":
     # Example usage
     owner_id = 12345
     file_id = 123
-    index = 1
+    index = 0
     data = b"Hello, World!"
     padded = data.ljust(DATA_SIZE, b'\x00')  # Pad the data to 80 nt (160 bits)
 
