@@ -1,8 +1,8 @@
 
-ADN_ALPHABET = "ATCG"
-ADN_ALPHABET_REVERSE = {char: index for index, char in enumerate(ADN_ALPHABET)}
+DNA_ALPHABET = "ATCG"
+DNA_ALPHABET_REVERSE = {char: index for index, char in enumerate(DNA_ALPHABET)}
 
-ADN_PAIRS = {
+DNA_PAIRS = {
     "A": "T",
     "T": "A",
     "C": "G",
@@ -23,12 +23,13 @@ def text_to_bytes(text: str) -> bytes:
 
 def bytes_to_text(input_bytes: bytes) -> str:
     """Convert bytes back to string using UTF-8 decoding."""
-    text = input_bytes.decode("utf-8")
+    text = input_bytes.decode("utf-8", errors="ignore")
+
     return text
 
 
-def bytes_to_adn(input_byte: bytes) -> str:
-    """Convert bytes to ADN representation."""
+def bytes_to_dna(input_byte: bytes) -> str:
+    """Convert bytes to DNA representation."""
     binary_str = ''.join(format(byte, '08b') for byte in input_byte)
     if len(binary_str) % 2 != 0:
         binary_str = '0' + binary_str
@@ -36,17 +37,17 @@ def bytes_to_adn(input_byte: bytes) -> str:
     # Convert every two binary digits to base-4
     base4_str = ''.join(str(int(binary_str[i:i+2], 2)) for i in range(0, len(binary_str), 2))
 
-    # Convert to ADN representation
+    # Convert to DNA representation
 
-    adn_str = ''.join(ADN_ALPHABET[int(digit)] for digit in base4_str)
+    dna_str = ''.join(DNA_ALPHABET[int(digit)] for digit in base4_str)
 
-    return adn_str
+    return dna_str
 
 
-def adn_to_bytes(adn_str: str) -> bytes:
-    """Convert ADN representation back to bytes."""
-    # Convert ADN to base-4
-    base4_str = ''.join(str(ADN_ALPHABET_REVERSE[char]) for char in adn_str)
+def dna_to_bytes(dna_str: str) -> bytes:
+    """Convert DNA representation back to bytes."""
+    # Convert DNA to base-4
+    base4_str = ''.join(str(DNA_ALPHABET_REVERSE[char]) for char in dna_str)
 
     # Convert base-4 to binary string
     binary_str = ''.join(format(int(digit), '02b') for digit in base4_str)
@@ -63,10 +64,10 @@ def adn_to_bytes(adn_str: str) -> bytes:
     return bytes(byte_array)
 
 
-def adn_to_text(adn_str: str) -> str:
-    """Convert ADN representation to text."""
-    # Convert ADN to bytes
-    byte_array = adn_to_bytes(adn_str)
+def dna_to_text(dna_str: str) -> str:
+    """Convert DNA representation to text."""
+    # Convert DNA to bytes
+    byte_array = dna_to_bytes(dna_str)
     
     # Convert bytes to text
     text = bytes_to_text(byte_array)
@@ -74,32 +75,32 @@ def adn_to_text(adn_str: str) -> str:
     return text
 
 
-def text_to_adn(text: str) -> str:
-    """Convert text to ADN representation."""
+def text_to_dna(text: str) -> str:
+    """Convert text to DNA representation."""
     # Convert text to bytes
     byte_array = text_to_bytes(text)
     
-    # Convert bytes to ADN
-    adn_str = bytes_to_adn(byte_array)
+    # Convert bytes to DNA
+    dna_str = bytes_to_dna(byte_array)
     
-    return adn_str
+    return dna_str
     
     
 
 if __name__ == "__main__":
 
 
-    print(bytes_to_adn(b"Hello World!"))
-    print(adn_to_bytes("TACATCTTTCGATCGATCGGACAATTTGTCGGTGACTCGATCTAACAT"))
+    print(bytes_to_dna(b"Hello World!"))
+    print(dna_to_bytes("TACATCTTTCGATCGATCGGACAATTTGTCGGTGACTCGATCTAACAT"))
 
-    print(adn_to_bytes("TAATTAAT"))
-    print(bytes_to_text(adn_to_bytes("TAATTAAT")))
+    print(dna_to_bytes("TAATTAAT"))
+    print(bytes_to_text(dna_to_bytes("TAATTAAT")))
 
-    print(text_to_adn('''{
+    print(text_to_dna('''{
   "owner":"-----",
   "crypto":"NERM",
   "filename":"name.txt",  
   "data":"---"
 }'''))
     
-    print(adn_to_text("TGCGAACCACAAACAAACACTCGGTGTGTCGCTCTTTGACACACAGCCACACACGTACGTACGTACGTACGTACACACGAAACCACAAACAAACACTCAGTGACTGCTTGAATGTATCGGACACAGCCACACTAGCTATTTTACTAGTACACACGAAACCACAAACAAACACTCTCTCCTTCGATCTTTCGCTCATTCGTTCTTACACAGCCACACTCGCTCATTCGTTCTTACGCTGTATGCATGTAACACACGAACAAACAAAACCACAAACAAACACTCTATCATTGTATCATACACAGCCACACACGTACGTACGTACACAACCTGGT"))
+    print(dna_to_text("TGCGAACCACAAACAAACACTCGGTGTGTCGCTCTTTGACACACAGCCACACACGTACGTACGTACGTACGTACACACGAAACCACAAACAAACACTCAGTGACTGCTTGAATGTATCGGACACAGCCACACTAGCTATTTTACTAGTACACACGAAACCACAAACAAACACTCTCTCCTTCGATCTTTCGCTCATTCGTTCTTACACAGCCACACTCGCTCATTCGTTCTTACGCTGTATGCATGTAACACACGAACAAACAAAACCACAAACAAACACTCTATCATTGTATCATACACAGCCACACACGTACGTACGTACACAACCTGGT"))
