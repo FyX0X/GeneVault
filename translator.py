@@ -61,14 +61,45 @@ def adn_to_bytes(adn_str: str) -> bytes:
         byte_array.append(int(binary_str[i:i+8], 2))
     
     return bytes(byte_array)
+
+
+def adn_to_text(adn_str: str) -> str:
+    """Convert ADN representation to text."""
+    # Convert ADN to bytes
+    byte_array = adn_to_bytes(adn_str)
+    
+    # Convert bytes to text
+    text = bytes_to_text(byte_array)
+    
+    return text
+
+
+def text_to_adn(text: str) -> str:
+    """Convert text to ADN representation."""
+    # Convert text to bytes
+    byte_array = text_to_bytes(text)
+    
+    # Convert bytes to ADN
+    adn_str = bytes_to_adn(byte_array)
+    
+    return adn_str
     
     
 
+if __name__ == "__main__":
 
 
+    print(bytes_to_adn(b"Hello World!"))
+    print(adn_to_bytes("TACATCTTTCGATCGATCGGACAATTTGTCGGTGACTCGATCTAACAT"))
 
-print(bytes_to_adn(b"Hello World!"))
-print(adn_to_bytes("TACATCTTTCGATCGATCGGACAATTTGTCGGTGACTCGATCTAACAT"))
+    print(adn_to_bytes("TAATTAAT"))
+    print(bytes_to_text(adn_to_bytes("TAATTAAT")))
 
-print(adn_to_bytes("TAATTAAT"))
-print(bytes_to_text(adn_to_bytes("TAATTAAT")))
+    print(text_to_adn('''{
+  "owner":"-----",
+  "crypto":"NERM",
+  "filename":"name.txt",  
+  "data":"---"
+}'''))
+    
+    print(adn_to_text("TGCGAACCACAAACAAACACTCGGTGTGTCGCTCTTTGACACACAGCCACACACGTACGTACGTACGTACGTACACACGAAACCACAAACAAACACTCAGTGACTGCTTGAATGTATCGGACACAGCCACACTAGCTATTTTACTAGTACACACGAAACCACAAACAAACACTCTCTCCTTCGATCTTTCGCTCATTCGTTCTTACACAGCCACACTCGCTCATTCGTTCTTACGCTGTATGCATGTAACACACGAACAAACAAAACCACAAACAAACACTCTATCATTGTATCATACACAGCCACACACGTACGTACGTACACAACCTGGT"))
