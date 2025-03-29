@@ -3,9 +3,14 @@ from Crypto.Util.Padding import pad, unpad
 import os 
 
 def create_key():
+    """ Creates a random key 16 bytes long"""
     return os.urandom(16)
 
 def encrypt_file(key, input_file, output_file):
+    """Encrypts input_file with AES-256 CBC mode
+    Args:
+    input_file is a .txt file 
+    output_file is a .txt file filled with bytes"""
     cipher = AES.new(key, AES.MODE_CBC)
     iv = cipher.iv  # Generate IV
     with open(input_file, 'rb') as f:
@@ -15,6 +20,10 @@ def encrypt_file(key, input_file, output_file):
         f.write(iv + encrypted_data)  # Save IV + ciphertext
 
 def decrypt_file(key, input_file, output_file):
+    """Decrypts input_file with AES-256 CBC mode
+    Args:
+    input_file is a .txt file filled with bytes, an encrypted file
+    output_file is a .txt fiel with the decrypted data"""
     with open(input_file, 'rb') as f:
         iv = f.read(16)  # Read the first 16 bytes (IV)
         encrypted_data = f.read()
