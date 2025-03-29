@@ -29,7 +29,6 @@ def create_ordered_dna_strands(dna_strands: list[str]) -> bytes:
 
     for strand in dna_strands:
 
-        print(len(strand))
         strand_data = reading.read_dna_strands(strand)  # Read the DNA strands
 
 
