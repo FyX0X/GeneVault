@@ -6,17 +6,19 @@ def create_key():
     return os.urandom(16)
 
 def encrypt_file(key, input_file, output_file):
-    cipher = AES.new(key, AES.MODE_ECB)
+    cipher = AES.new(key, AES.MODE_CBC)
+    iv = cipher.iv  # Generate IV
     with open(input_file, 'rb') as f:
         data = f.read()
     encrypted_data = cipher.encrypt(pad(data, AES.block_size))
     with open(output_file, 'wb') as f:
-        f.write(encrypted_data)
+        f.write(iv + encrypted_data)  # Save IV + ciphertext
 
 def decrypt_file(key, input_file, output_file):
-    cipher = AES.new(key, AES.MODE_ECB)
     with open(input_file, 'rb') as f:
+        iv = f.read(16)  # Read the first 16 bytes (IV)
         encrypted_data = f.read()
+    cipher = AES.new(key, AES.MODE_CBC, iv=iv)
     decrypted_data = unpad(cipher.decrypt(encrypted_data), AES.block_size)
     with open(output_file, 'wb') as f:
         f.write(decrypted_data)
