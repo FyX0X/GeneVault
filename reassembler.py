@@ -28,7 +28,10 @@ def create_ordered_dna_strands(dna_strands: list[str]) -> bytes:
     ordered_dna_strands = [None] * len(dna_strands)  # Initialize an empty list to hold the ordered DNA strands
 
     for strand in dna_strands:
+
+        print(len(strand))
         strand_data = reading.read_dna_strands(strand)  # Read the DNA strands
+
 
         index = strand_data["index"]  # Get the index from the DNA strand data
         ordered_dna_strands[index] = strand_data["data"]  # Store the data at the correct index

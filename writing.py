@@ -1,6 +1,5 @@
 import translator
 import reedsolo
-import zlib
 
 
 DATA_SIZE = 27  # 108 nt (204 bits) long (27 bytes)
@@ -36,7 +35,7 @@ def write_dna_strand(owner_id: int, file_id: int, index: int, data: bytes) -> st
     rs_encoded = reedsolo_encode(data)
     adn_str += translator.bytes_to_dna(rs_encoded)  # Add Reed-Solomon encoded data to the ADN string
 
-    cs = checksum_crc32(owner_bytes, file_bytes, index_bytes, rs_encoded)  # Calculate checksum of the data and ECC
+    cs = checksum_prime(owner_bytes, file_bytes, index_bytes, rs_encoded)  # Calculate checksum of the data and ECC
     adn_str += translator.bytes_to_dna(cs)  # Add checksum to the ADN string
 
     adn_str += suffix()  # Add suffix to the ADN string
@@ -74,12 +73,15 @@ def reedsolo_encode(data: bytes) -> str:
     return encoded_data
 
 
-def checksum_crc32(owner: bytes, file: bytes, index: bytes, encoded_data: bytes) -> bytes:
-    """ Calculate the CRC32 checksum of the data. and truncaste it to 2 bytes."""
+def checksum_prime(owner: bytes, file: bytes, index: bytes, encoded_data: bytes) -> bytes:
+    """Calculate the checksum by dividing the data by the largest prime that fits in 2 bytes."""
+    LARGEST_PRIME = 65521  # Largest prime number that fits in 2 bytes
     data = owner + file + index + encoded_data
     print("checksum data:", data)
-    cs = (zlib.crc32(data) & 0xFFFF).to_bytes(2, byteorder="big", signed=False)  # 2 bytes (8 pairs) 
-    return cs
+    
+    # Calculate the checksum as the remainder of the sum of the data divided by the prime
+    checksum_value = sum(data) % LARGEST_PRIME
+    return checksum_value.to_bytes(2, byteorder="big", signed=False)
 
 
 if __name__ == "__main__":

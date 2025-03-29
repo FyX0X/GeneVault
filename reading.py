@@ -1,6 +1,5 @@
 import translator
 import reedsolo
-import zlib
 from writing import DATA_SIZE, ERROR_CORRECTION_SIZE
 
 
@@ -24,7 +23,7 @@ def read_dna_strands(dna_str: str) -> list:
     print(bytes_data)
     print(checksum)
 
-    assert verify_checksum(bytes_data[:-2], checksum), "Checksum verification failed. Data may be corrupted."
+    assert verify_checksum_prime(bytes_data[:-2], checksum), "Checksum verification failed. Data may be corrupted."
     
     owner_id = int.from_bytes(owner_bytes, byteorder="big", signed=False)  # 2 bytes (4 pairs)
     file_id = int.from_bytes(file_bytes, byteorder="big", signed=False)  # 2 bytes (4 pairs)
@@ -46,14 +45,16 @@ def read_dna_strands(dna_str: str) -> list:
     }
 
 
-def verify_checksum(data: bytes, checksum: bytes) -> bool:
-    """Verify the checksum of the given data."""
-    cs = (zlib.crc32(data) & 0xFFFF).to_bytes(2, byteorder="big", signed=False)  # 2 bytes (8 pairs)
-    print("verif:", cs)
-    return cs == checksum
+def verify_checksum_prime(data: bytes, checksum: bytes) -> bytes:
+    """Calculate the checksum by dividing the data by the largest prime that fits in 2 bytes."""
+    LARGEST_PRIME = 65521  # Largest prime number that fits in 2 bytes
+    
+    # Calculate the checksum as the remainder of the sum of the data divided by the prime
+    checksum_value = sum(data) % LARGEST_PRIME
+    return checksum_value.to_bytes(2, byteorder="big", signed=False) == checksum
 
 
 if __name__ == "__main__":
     # Example usage
-    dna_str = "ACACAGAAAGCTAAAATGCGAAAAAAAATACATCTTTCGATCGATCGGACGAACAATTTGTCGGTGACTCGATCTAACATAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGGGGCAGCCAGACGAATCGGCATGGTGGAATTGATAGCCCAGCGCGTCTCCTACACGAAAGAG"
+    dna_str = "ACACAGAAAGCTAAAATGCGAAAAAAAATACATCTTTCGATCGATCGGACGAACAATTTGTCGGTGACTCGATCTAACATAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGGGGCAGCCAGACGAATCGGCATGGTGGAATTGATAGCCCAGCGCGTCTCCAAGACGACAGAG"
     print(read_dna_strands(dna_str))
