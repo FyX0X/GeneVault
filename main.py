@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 from Crypto.Cipher import AES
 from Crypto.Util.Padding import pad, unpad
 from Crypto.Random import get_random_bytes
@@ -43,3 +44,7 @@ key, iv = generate_key_iv()  # Génération de la clé et de l'IV
 encrypt_file("mon_fichier.txt", "fichier_chiffre.aes", key, iv)  # Chiffrement
 decrypt_file("fichier_chiffre.aes", "fichier_dechiffre.txt", key)  # Déchiffrement
 
+=======
+print("hello world")
+print("Hachiman")
+>>>>>>> 51e1242295ed4b40aae96b6d2154b70de1eae8ea
