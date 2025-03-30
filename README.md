@@ -16,9 +16,9 @@ A Python-based software for encoding, encrypting, and storing data in DNA sequen
 - Automatically handles padding and initialization vectors (IV).
 - Simple and user-friendly interface.
 
-## installation 
-- installation of python
-- client side: need to install reedsolo
+## Dependencies 
+- reedsolo
+- pycryptodome
 
 ## Usage
 - store data in a secure and durable manner
