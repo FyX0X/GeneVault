@@ -54,6 +54,8 @@ def handle_client(client_socket):
                 if Confirmation == "Ok":
                     client_socket.sendall(reponse.encode())
                 print("Reading sucessful !")
+            else:
+                client_socket.sendall("Wrong token".encode())    
         except:
             client_socket.sendall(str("There has been an error in reading the file").encode())
             print("There has been an error in reading the file")
@@ -72,6 +74,8 @@ def handle_client(client_socket):
                 confirmation = "Ok"
                 client_socket.sendall(confirmation.encode())
                 print("Writing successful !")
+            else:
+                client_socket.sendall("Wrong token".encode())   
         except:
             client_socket.sendall(str("There has been an error in writing the file").encode())
             print("There has been an error in writing the file")
