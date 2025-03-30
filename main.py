@@ -1,10 +1,9 @@
 import Cryptography
-import translator 
 import writing
 import sliceur
 
 
-print("Hello, welcome to the Fork project")
+print("Hello, welcome to GeneVault, a The Fork group project")
 print("Are you a new user? [Y/N]")
 user = input().upper()
 if user == "N":
@@ -17,10 +16,10 @@ elif user == "Y":
 print("key", int.from_bytes(key, byteorder="big", signed=False))
 print("What file do you want to put in the time capsule ?")
 input_file = input("Path: ")
-print("Where do you want your encrypted file ?")
-output_file = input("Path: ")
+print("Where do you want your encrypted file ? (do nothing if you want to keep it in the same folder)")
+output_path = input("Path: ")
 print("what is the name of your file ?")
-output = input("Name: ")
+output_file = output_path + '/' + input("Name: ") + '.dna'
 print("Send us the .dna file and we will store it!")
 
 

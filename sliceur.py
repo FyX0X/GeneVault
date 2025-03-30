@@ -15,12 +15,12 @@ def sliceur(data, n):
             segment += end_sequence[:min(padding_required, len(end_sequence))]
             if len(segment) <= n:
                 # If the segment is still not long enough, fill with zeros
-                segment += b'\x00' * n - len(segment)
+                segment += b'\x00' * (n - len(segment))
                 slices.append(segment)
                 return slices
             slices.append(segment)
             segment = end_sequence[padding_required:]
-            segment += b'\x00' * n - len(segment)
+            segment += b'\x00' * (n - len(segment))
 
 
         slices.append(segment)
