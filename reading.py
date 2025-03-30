@@ -20,17 +20,19 @@ def read_dna_strands(dna_str: str) -> list:
     encoded_data = bytes_data[6:-2]  # 108 nt (27 bytes) long (27 bytes)
     checksum = bytes_data[-2:]  # 2 bytes (4 pairs)
 
-    assert verify_checksum_prime(bytes_data[:-2], checksum), "Checksum verification failed. Data may be corrupted."
+
+    try:
+        data = rs.decode(encoded_data)
+    except reedsolo.ReedSolomonError as e:
+        print(f"Error during decoding: {e}")
+    
+    assert verify_checksum_prime(owner_bytes + file_bytes + index_bytes + data[0], checksum), "Checksum verification failed. Data may be corrupted."
+
     
     owner_id = int.from_bytes(owner_bytes, byteorder="big", signed=False)  # 2 bytes (4 pairs)
     file_id = int.from_bytes(file_bytes, byteorder="big", signed=False)  # 2 bytes (4 pairs)
     index = int.from_bytes(index_bytes, byteorder="big", signed=False)  # 2 bytes (4 pairs)
 
-    
-    try:
-        data = rs.decode(encoded_data)
-    except reedsolo.ReedSolomonError as e:
-        print(f"Error during decoding: {e}")
 
     return {
         "owner_id": owner_id,
