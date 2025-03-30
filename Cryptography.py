@@ -25,10 +25,11 @@ def decrypt_file(key, encrypted_data):
     iv = encrypted_data[:16]
     cipher = AES.new(key, AES.MODE_CBC, iv=iv)
     decrypted_data = unpad(cipher.decrypt(encrypted_data[16:]), AES.block_size)
+    
     return decrypted_data
     
 if __name__ == "__main__":
     key = create_key()
-    liste=decrypt_file(key, encrypt_file(key, 'File.txt'))
-    with open("Test.txt", 'wb') as f:
+    liste=decrypt_file(key, encrypt_file(key, 'test/test.txt'))
+    with open("test/test.txt", 'wb') as f:
         f.write(liste)

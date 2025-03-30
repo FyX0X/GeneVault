@@ -77,7 +77,6 @@ def checksum_prime(owner: bytes, file: bytes, index: bytes, encoded_data: bytes)
     """Calculate the checksum by dividing the data by the largest prime that fits in 2 bytes."""
     LARGEST_PRIME = 65521  # Largest prime number that fits in 2 bytes
     data = owner + file + index + encoded_data
-    print("checksum data:", data)
     
     # Calculate the checksum as the remainder of the sum of the data divided by the prime
     checksum_value = sum(data) % LARGEST_PRIME

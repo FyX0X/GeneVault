@@ -6,11 +6,15 @@ def main():
     parser = argparse.ArgumentParser(description="Reassemble DNA data from a file and output the result.")
     parser.add_argument("input_path", type=str, nargs="?", help="Path to the input .dna file")
     parser.add_argument("output_path", type=str, nargs="?", help="Path to save the output file")
+    parser.add_argument("key", type=int, nargs="?", help="Encryption key")
     args = parser.parse_args()
 
     # Prompt for input if arguments are not provided
     input_path = args.input_path or input("Enter the path to the input .dna file: ")
     output_path = args.output_path or input("Enter the path to save the output file: ")
+    key = args.key or int(input("Enter the encryption key: "))
+
+    key = key.to_bytes(16, byteorder="big", signed=False)  # Convert the key to bytes
 
     # Add your processing logic here
     print(f"Processing input file: {input_path}")
@@ -20,7 +24,12 @@ def main():
     list_of_dna_strands = open_file(input_path)  # Read the DNA strands from the input file
     ordered_dna_data = create_ordered_dna_strands(list_of_dna_strands)  # Create ordered DNA strands
 
-    write_file(output_path, ordered_dna_data)  # Create an empty file at the output path
+
+    data_to_decrypt = ordered_dna_data.rstrip(b"\x00")  # Remove padding bytes
+
+    decripted = Cryptography.decrypt_file(key, data_to_decrypt)  # Decrypt the ordered DNA data
+
+    write_file(output_path, decripted)  # Create an empty file at the output path
 
 
 def create_ordered_dna_strands(dna_strands: list[str]) -> bytes:
@@ -44,6 +53,7 @@ def open_file(input_path: str) -> list[str]:
     with open(input_path, "r") as file:
         dna_strands = file.readlines()
     return [strand.strip() for strand in dna_strands]
+
 
 
 def write_file(output_path: str, data: bytes) -> None:
