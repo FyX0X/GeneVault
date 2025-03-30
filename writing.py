@@ -35,7 +35,7 @@ def write_dna_strand(owner_id: int, file_id: int, index: int, data: bytes) -> st
     rs_encoded = reedsolo_encode(data)
     adn_str += translator.bytes_to_dna(rs_encoded)  # Add Reed-Solomon encoded data to the ADN string
 
-    cs = checksum_prime(owner_bytes, file_bytes, index_bytes, rs_encoded)  # Calculate checksum of the data and ECC
+    cs = checksum_prime(owner_bytes, file_bytes, index_bytes, data)  # Calculate checksum of the data and ECC
     adn_str += translator.bytes_to_dna(cs)  # Add checksum to the ADN string
 
     adn_str += suffix()  # Add suffix to the ADN string
