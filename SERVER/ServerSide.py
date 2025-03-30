@@ -1,6 +1,7 @@
 import socket
 import hashlib
 import os
+import time
 
 # packet format
 # 0: action
@@ -74,7 +75,14 @@ def handle_client(client_socket):
                     f.write(file_data)
                 confirmation = "Ok"
                 client_socket.sendall(confirmation.encode())
-                file_count[owner_id] += 1
+                with open("SERVER/data.csv",'r') as f:
+                    lines = f.readlines()
+                    line = lines[int(owner_id)].split(',')
+                    count = int(line[2])
+                    count += 1
+                    lines[int(owner_id)] = f"{line[0]},{line[1]},{count} \n"
+                with open("SERVER/data.csv", 'w') as f:
+                    f.writelines(lines)
                 print("Writing successful !")
             else:
                 client_socket.sendall("Wrong token".encode())   
@@ -112,5 +120,14 @@ def main():
 
     client_socket.close()
 
+def run_server():
+    while True:
+        try:
+            main() 
+        except Exception as e:
+            print(f"Fatal error: {e}")
+            print("Redémarrage du serveur")
+            time.sleep(3) 
+
 if __name__ == "__main__":
-    main()
+    run_server()
