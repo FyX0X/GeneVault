@@ -1,6 +1,6 @@
-# Hackathon 2025 - DNA as a Storage
+# GeneVault - DNA as a Storage
 
-A Python-based software solution for encoding, encrypting, and storing data in DNA sequences. This project integrates advanced DNA data storage techniques with AES (Advanced Encryption Standard) encryption to ensure secure and efficient file handling.
+A Python-based software solution for encoding, encrypting, and storing data in DNA sequences. This project integrates advanced DNA data storage techniques with AES (Advanced Encryption Standard) encryption to ensure secure and efficient file handling. This project was made during the 2025 CECI-BEST Hackathon, organized with Odoo.
 
 ## Table of Contents
 - [Features](#features)
