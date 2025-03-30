@@ -155,6 +155,11 @@ if __name__ == "__main__":
             main(action, _input, output_path, owner_id, key)
 
             action = input("Enter the action ('--write' or '--read' or '--register' or '--exit'): ")
+        except socket.error as e:
+            if e.errno == 10054:
+                print(f"Connexion was severed, aborting the program.")
+                sclient.close()
+                exit()
         except Exception as e:
             print(f"Unexpected error: {e}")
 
