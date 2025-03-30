@@ -60,9 +60,9 @@ def handle_client(client_socket):
             else:
                 client_socket.sendall("Wrong token".encode()) 
                 return   
-        except:
+        except Exception as e:
             client_socket.sendall("There has been an error in reading the file".encode())
-            print("There has been an error in reading the file")
+            print("There has been an error in reading the file",e )
             return
     
     elif action == "write":
@@ -90,9 +90,9 @@ def handle_client(client_socket):
             else:
                 client_socket.sendall("Wrong token".encode())   
                 return
-        except:
+        except Exception as e:
             client_socket.sendall("There has been an error in writing the file".encode())
-            print("There has been an error in writing the file")
+            print("There has been an error in writing the file" ,e )
             return
     
     elif packet[0] == "register":
@@ -105,9 +105,9 @@ def handle_client(client_socket):
             client_socket.sendall(str(owner_id).encode())
             print('Registering done !')
             reload_csv()
-        except:
+        except Exception as e:
             client_socket.sendall(str("There has been an error in registering").encode())
-            print("There has been an error in registering")
+            print("There has been an error in registering",e)
             return
 
 def main():
