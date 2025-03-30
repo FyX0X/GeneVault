@@ -60,11 +60,8 @@ def suffix() -> str:
 def reedsolo_encode(data: bytes) -> str:
     """ Write the data to the ADN string."
     The data is Reed-Solomon encoded and then converted to DNA.
-    The data must be 80 nt (160 bits) long.
+    The data must be 108 nt (27 bytes) long.
     """
-    # Check if the data is 100 nt (200 bits) long
-    assert len(data) == DATA_SIZE, "Data must be 80 nt (160 bits) long."
-    assert isinstance(data, bytes), "Data must be of type bytes."
 
     # Encode data using Reed-Solomon
     encoded_data = rs.encode(data)
