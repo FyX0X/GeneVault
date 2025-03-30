@@ -57,7 +57,7 @@ def handle_client(client_socket):
             else:
                 client_socket.sendall("Wrong token".encode())    
         except:
-            client_socket.sendall(str("There has been an error in reading the file").encode())
+            client_socket.sendall("There has been an error in reading the file".encode())
             print("There has been an error in reading the file")
     
     elif action == "write":
@@ -77,9 +77,8 @@ def handle_client(client_socket):
             else:
                 client_socket.sendall("Wrong token".encode())   
         except:
-            client_socket.sendall(str("There has been an error in writing the file").encode())
+            client_socket.sendall("There has been an error in writing the file".encode())
             print("There has been an error in writing the file")
-
     
     elif packet[0] == "register":
         try:
@@ -93,8 +92,6 @@ def handle_client(client_socket):
         except:
             client_socket.sendall(str("There has been an error in registering").encode())
             print("There has been an error in registering")
-
-
 
 def main():
     """ Démarre le serveur TCP """
