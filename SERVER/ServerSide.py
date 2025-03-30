@@ -53,7 +53,7 @@ def handle_client(client_socket):
                 Confirmation = client_socket.recv(1000000).decode()
                 if Confirmation == "Ok":
                     client_socket.sendall(reponse.encode())
-                print("reading")
+                print("Reading sucessful !")
         except:
             client_socket.sendall(str("There has been an error in reading the file").encode())
             print("There has been an error in reading the file")
@@ -71,7 +71,7 @@ def handle_client(client_socket):
                     f.write(file_data)
                 confirmation = "Ok"
                 client_socket.sendall(confirmation.encode())
-                print("writing")
+                print("Writing successful !")
         except:
             client_socket.sendall(str("There has been an error in writing the file").encode())
             print("There has been an error in writing the file")
@@ -79,12 +79,12 @@ def handle_client(client_socket):
     
     elif packet[0] == "register":
         try:
-            print('Registering')
             with open("SERVER/data.csv", "a") as f:
                 owner_id = len(tokens)
                 hash_token = hashlib.sha256(token.encode()).hexdigest()
                 f.write(str(owner_id)+ "," + str(hash_token) + ",0 \n")
             client_socket.sendall(str(owner_id).encode())
+            print('Registering done !')
             reload_csv()
         except:
             client_socket.sendall(str("There has been an error in registering").encode())
