@@ -56,6 +56,7 @@ def handle_client(client_socket):
                 print("reading")
         except:
             client_socket.sendall(str("There has been an error in reading the file").encode())
+            print("There has been an error in reading the file")
     
     elif action == "write":
         try: 
@@ -73,6 +74,7 @@ def handle_client(client_socket):
                 print("writing")
         except:
             client_socket.sendall(str("There has been an error in writing the file").encode())
+            print("There has been an error in writing the file")
 
     
     elif packet[0] == "register":
@@ -86,6 +88,7 @@ def handle_client(client_socket):
             reload_csv()
         except:
             client_socket.sendall(str("There has been an error in registering").encode())
+            print("There has been an error in registering")
 
 
 
