@@ -33,6 +33,7 @@ def check_token(owner_id, token):
     return False
 
 def handle_client(client_socket):
+    """Handles the packets sent by the client"""
     print("Waiting for information ...")
     packet = client_socket.recv(4096).decode()
 
@@ -45,6 +46,7 @@ def handle_client(client_socket):
         pass
 
     if action == "read":
+        """When the client ask to read his files"""
         try:
             if check_token(owner_id,token) is True:
                 file = "SERVER/client_data/" + str(owner_id) + "/" + str(packet[3]) + ".dna"
@@ -64,6 +66,7 @@ def handle_client(client_socket):
             return
     
     elif action == "write":
+        """When the client wants to give a file"""
         try: 
             if check_token(owner_id,token) is True:
                 reponse = str(file_count[owner_id])
@@ -93,6 +96,7 @@ def handle_client(client_socket):
             return
     
     elif packet[0] == "register":
+        """When the client is new"""
         try:
             with open("SERVER/data.csv", "a") as f:
                 owner_id = len(tokens)
@@ -107,7 +111,7 @@ def handle_client(client_socket):
             return
 
 def main():
-    """ Démarre le serveur TCP """
+    """ Starts the server TCP """
     sserveur = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sserveur.bind((IP_SERVEUR, PORT))
     sserveur.listen(5)  # Permet 5 connexions en attente
@@ -121,6 +125,7 @@ def main():
     client_socket.close()
 
 def run_server():
+    """Restart the server if it crashes"""
     while True:
         try:
             main() 
