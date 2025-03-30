@@ -1,5 +1,4 @@
 import writing
-import reading as reading
 import Cryptography
 import reassembler
 import sliceur

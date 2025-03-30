@@ -1,6 +1,4 @@
 import reading as reading
-import Cryptography
-import argparse  # Added for CLI support
 
 
 def recombine_bytes_from_dna_strands(dna_strands: list[str]) -> bytes:
