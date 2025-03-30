@@ -29,7 +29,7 @@ while True:
         reponse = str(owner_id) + "," + str(owners[str(owner_id)])
         sserveur.sendto(reponse.encode(), adclient)
         print(owner_id)
-        print(file_id)
+        print(str(owners[str(owner)]))
     except:
         reponse = "Owner_ID doesn't exist"
         sserveur.sendto(reponse.encode(), adclient)       
