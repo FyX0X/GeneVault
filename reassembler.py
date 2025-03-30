@@ -1,4 +1,4 @@
-import reading as reading
+import reading
 
 
 def recombine_bytes_from_dna_strands(dna_strands: list[str]) -> bytes:

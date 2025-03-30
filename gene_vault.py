@@ -109,7 +109,7 @@ def process_read(output_path: str, owner_id: int, key: bytes, file_id: int) -> N
     write_file(output_path + "_temp.dna", data.encode())
 
     dna_strands = reassembler.open_file_as_list(output_path + "_temp.dna")  # Read the DNA strands from the input file
-    recombined_bytes = reassembler.recombine_bytes_from_dna_strands(dna_strands).rstrip(b'\x00')   # Create ordered DNA strands
+    recombined_bytes = reassembler.recombine_bytes_from_dna_strands(dna_strands)   # Create ordered DNA strands
     depadded = reassembler.remove_padding(recombined_bytes)
     decripted = Cryptography.decrypt_file(key, depadded) # Decrypt the ordered DNA data
 
@@ -134,7 +134,7 @@ if __name__ == "__main__":
     action = input("Enter the action ('--write' or '--read' or '--register' or '--exit'): ")
 
     while action != '--exit':
-        try:
+        #try:
             # Prompt for input if arguments are not provided
             if action in ['--read', '-r']:
                 owner_id = int(input("Enter the Owner ID: "))
@@ -154,13 +154,13 @@ if __name__ == "__main__":
             main(action, _input, output_path, owner_id, key)
 
             action = input("Enter the action ('--write' or '--read' or '--register' or '--exit'): ")
-        except socket.error as e:
-            if e.errno == 10054:
-                print(f"Connexion was severed, aborting the program.")
-                sclient.close()
-                exit()
-        except Exception as e:
-            print(f"Unexpected error: {e}")
+        #except socket.error as e:
+        #    if e.errno == 10054:
+        #       print(f"Connexion was severed, aborting the program.")
+        #        sclient.close()
+        #        exit()
+        #except Exception as e:
+        #    print(f"Unexpected error: {e}")
 
         
     sclient.close()
