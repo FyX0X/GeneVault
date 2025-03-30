@@ -2,6 +2,7 @@ import socket
 import hashlib
 import os
 import time
+import csv
 
 # packet format
 # 0: action
@@ -11,19 +12,50 @@ import time
 
 IP_SERVEUR = '10.57.29.52'  # Remplacez par votre adresse IP locale
 PORT = 54321
+SERVER_CSV_DATABASE = "SERVER/data.csv"
 
+client_data = []
 tokens = {}
 file_count = {}
 
-def reload_csv():
-    with open("SERVER/data.csv", "r") as file:
-        """Fill the tokens and file_count with the exixting data"""
-        lines = file.readlines()
-        for line in lines:
-            owner_id, token, file_id = line.strip().split(",")
-            tokens[owner_id] = token
-            file_count[owner_id] = int(file_id)
-reload_csv()
+import csv
+
+filename = "data.csv"
+
+tokens = []
+file_count = []
+
+def load_csv():
+    # Open the CSV file and read it as a list of dictionaries
+    with open(SERVER_CSV_DATABASE, "r", newline="") as file:
+        reader = csv.reader(file)  # Read CSV as dictionary
+
+        for row in reader:
+            # Append dictionary with selected fields (ignoring "id")
+            tokens.append(row[1])
+            file_count.append(row[2])
+
+load_csv()
+
+def send_packet(action: str, owner: int = None, key: bytes = None, file_id=None):
+    message = f"{action},{owner},"
+    token = hashlib.sha256(key).hexdigest()
+    message += token
+    if file_id is not None:
+        message += "," + str(file_id)
+    print(f"send message: {message}")
+    client_socket.sendall(message.encode())
+
+
+def send_msg_packet(msg: str):
+    print(f"send message: {msg}")
+    sclient.sendall(msg.encode())
+
+
+def receive_packet(size: int = 4096) -> str:
+    message = sclient.recv(size).decode()
+    print(f"received packet: {message}")
+    return message
 
 def check_token(owner_id, token):
     """Check if the token is valid for the given owner ID."""
@@ -117,12 +149,24 @@ def main():
     sserveur.listen(5)  # Permet 5 connexions en attente
     print(f"Server booted on {IP_SERVEUR}:{PORT}")
     client_socket, addr = sserveur.accept()
-    while True:
-        print(f"Connexion from {addr}")
-        # Gérer le client dans une fonction séparée
-        handle_client(client_socket)
 
-    client_socket.close()
+    while True:
+        # Accept a new connection
+        client_socket, client_address = sserveur.accept()
+        print(f"Connection received from {client_address}")
+
+        # Receive data (max 1024 bytes at a time)
+        data = client_socket.recv(1024)
+        if not data:
+            break
+
+        print(f"Received: {data.decode()}")
+
+        # Send a response
+        client_socket.sendall(b"Message received!")
+
+        # Close the client connection
+        client_socket.close()
 
 def run_server():
     """Restart the server if it crashes"""

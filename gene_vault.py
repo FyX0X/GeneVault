@@ -164,3 +164,116 @@ if __name__ == "__main__":
 
         
     sclient.close()
+
+
+# -------------------------------------------------------------
+
+import socket
+import hashlib
+import Cryptography
+import writing
+import reassembler
+import sliceur
+
+IP_SERVER = '0.0.0.0'  # Listen on all interfaces
+PORT = 54321
+BUFFER_SIZE = 4096
+
+# In-memory storage for registered users (Replace with persistent storage if needed)
+users = {}
+files = {}
+
+
+def receive_packet(conn, size=BUFFER_SIZE) -> str:
+    message = conn.recv(size).decode()
+    print(f"Received packet: {message}")
+    return message
+
+
+def send_packet(conn, message: str):
+    print(f"Sending message: {message}")
+    conn.sendall(message.encode())
+
+
+def process_register(conn):
+    key = Cryptography.create_key()
+    owner_id = len(users) + 1  # Assign new ID
+    users[owner_id] = key
+    send_packet(conn, str(owner_id))
+    print(f"Registered new user: {owner_id}")
+
+
+def process_write(conn, owner_id: int, key: bytes):
+    if owner_id not in users or users[owner_id] != key:
+        send_packet(conn, "Wrong token")
+        return
+
+    file_id = len(files) + 1  # Assign new file ID
+    files[file_id] = b""
+    send_packet(conn, str(file_id))
+
+    data = receive_packet(conn, BUFFER_SIZE * 100)  # Receive large data
+    files[file_id] = data.encode()
+    send_packet(conn, "Ok")
+    print(f"Stored file {file_id} for owner {owner_id}")
+
+
+def process_read(conn, owner_id: int, key: bytes, file_id: int):
+    if owner_id not in users or users[owner_id] != key:
+        send_packet(conn, "Wrong token")
+        return
+
+    if file_id not in files:
+        send_packet(conn, "File not found")
+        return
+
+    data = files[file_id]
+    send_packet(conn, str(len(data)))
+    receive_packet(conn)  # Wait for client confirmation
+    conn.sendall(data)
+    print(f"Sent file {file_id} to owner {owner_id}")
+
+
+def handle_client(conn, addr):
+    print(f"New connection from {addr}")
+    while True:
+        try:
+            message = receive_packet(conn)
+            if not message:
+                break
+            
+            parts = message.split(",")
+            action = parts[0]
+            owner_id = int(parts[1]) if len(parts) > 1 else None
+            key = bytes.fromhex(parts[2]) if len(parts) > 2 else None
+            file_id = int(parts[3]) if len(parts) > 3 else None
+
+            if action == "register":
+                process_register(conn)
+            elif action == "write":
+                process_write(conn, owner_id, key)
+            elif action == "read":
+                process_read(conn, owner_id, key, file_id)
+            else:
+                send_packet(conn, "Invalid action")
+        except Exception as e:
+            print(f"Error handling client {addr}: {e}")
+            break
+
+    conn.close()
+    print(f"Connection closed from {addr}")
+
+
+def start_server():
+    server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    server.bind((IP_SERVER, PORT))
+    server.listen(5)
+    print(f"Server listening on {IP_SERVER}:{PORT}")
+
+    while True:
+        conn, addr = server.accept()
+        handle_client(conn, addr)
+
+
+if __name__ == "__main__":
+    start_server()
