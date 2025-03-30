@@ -25,6 +25,14 @@ def open_file_as_list(input_path: str) -> list[str]:
 
 
 def remove_padding(data: bytes) -> bytes:
-    """Remove padding from the decrypted data."""
-    return data.rstrip(b'\x00')  # Remove padding bytes (0x00) from the end of the data
+    """Remove padding and the end sequence from the encrypted data."""
+    # Remove padding bytes (0x00) from the end of the data
+    data = data.rstrip(b'\x00')
+    
+    # Check if the data ends with the end sequence and remove it
+    end_sequence = b'\x4E\x45\x52\x4D'
+    if data.endswith(end_sequence):
+        data = data[:-len(end_sequence)]
+    
+    return data
 
