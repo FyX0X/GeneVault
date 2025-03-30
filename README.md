@@ -65,17 +65,6 @@ The project provides a command-line interface for storing and retrieving files u
 - Each strand includes metadata (owner ID, file ID, index) and checksums
 - The encryption key is never stored on the server
 
-### Example Commands
-```bash
-# Write mode
-python gene_vault.py --write
-# Follow the prompts to enter your credentials and file details
-
-# Read mode
-python gene_vault.py --read
-# Follow the prompts to enter your credentials and file details
-```
-
 ### Important Notes
 - Keep your Owner ID and encryption key secure - losing them means losing access to your files
 - The DNA-encoded files are temporary and will be deleted after successful server storage
