@@ -3,7 +3,7 @@ import reedsolo
 
 
 DATA_SIZE = 27  # 108 nt (204 bits) long (27 bytes)
-ERROR_CORRECTION_SIZE = 13  # 52 nt (104 bits) long (13 bytes)
+ERROR_CORRECTION_SIZE = 15  # 52 nt (104 bits) long (13 bytes)
 rs = reedsolo.RSCodec(ERROR_CORRECTION_SIZE)  # 33% error correction bytes
 
 
@@ -28,29 +28,23 @@ def write_dna_strand(owner_id: int, file_id: int, index: int, data: bytes) -> st
     owner_bytes = owner_id.to_bytes(2, byteorder="big", signed=False)  # 2 bytes (4 pairs)
     file_bytes = file_id.to_bytes(2, byteorder="big", signed=False)  # 2 bytes (4 pairs)
     index_bytes = index.to_bytes(2, byteorder="big", signed=False)  # 2 bytes (4 pairs)
+    
 
+    adn_str = prefix()
 
-    adn_str = prefix(owner_bytes, file_bytes, index_bytes)
-
-    rs_encoded = reedsolo_encode(data)
+    byte_array = owner_bytes + file_bytes + index_bytes + data
+    rs_encoded = reedsolo_encode(byte_array)
     adn_str += translator.bytes_to_dna(rs_encoded)  # Add Reed-Solomon encoded data to the ADN string
-
-    cs = checksum_prime(owner_bytes, file_bytes, index_bytes, data)  # Calculate checksum of the data and ECC
-    adn_str += translator.bytes_to_dna(cs)  # Add checksum to the ADN string
 
     adn_str += suffix()  # Add suffix to the ADN string
 
     return adn_str
 
 
-def prefix(owner_id: bytes, file_id: bytes, index: bytes) -> str:
+def prefix() -> str:
     """ Creates the prefix for the ADN string.
     The prefix consists of a fixed header and the owner ID, file ID, and index."""
-    prefix = "ACAC" # start 4 pairs (1 byte)
-    prefix += translator.bytes_to_dna(owner_id) # owner id 2 bytes
-    prefix += translator.bytes_to_dna(file_id) # file id 2 bytes
-    prefix += translator.bytes_to_dna(index) # index 2 bytes
-    return prefix
+    return "ACAC" # start 4 pairs (1 byte)
 
 
 def suffix() -> str:
@@ -60,7 +54,7 @@ def suffix() -> str:
 def reedsolo_encode(data: bytes) -> str:
     """ Write the data to the ADN string."
     The data is Reed-Solomon encoded and then converted to DNA.
-    The data must be 108 nt (27 bytes) long.
+    The data must be 108 nt (27 bytes) long. (+metadata)
     """
 
     # Encode data using Reed-Solomon
@@ -68,16 +62,6 @@ def reedsolo_encode(data: bytes) -> str:
 
 
     return encoded_data
-
-
-def checksum_prime(owner: bytes, file: bytes, index: bytes, encoded_data: bytes) -> bytes:
-    """Calculate the checksum by dividing the data by the largest prime that fits in 2 bytes."""
-    LARGEST_PRIME = 65521  # Largest prime number that fits in 2 bytes
-    data = owner + file + index + encoded_data
-    
-    # Calculate the checksum as the remainder of the sum of the data divided by the prime
-    checksum_value = sum(data) % LARGEST_PRIME
-    return checksum_value.to_bytes(2, byteorder="big", signed=False)
 
 
 if __name__ == "__main__":
