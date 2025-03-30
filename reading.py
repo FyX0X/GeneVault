@@ -20,9 +20,6 @@ def read_dna_strands(dna_str: str) -> list:
     encoded_data = bytes_data[6:-2]  # 108 nt (27 bytes) long (27 bytes)
     checksum = bytes_data[-2:]  # 2 bytes (4 pairs)
 
-    print(bytes_data)
-    print(checksum)
-
     assert verify_checksum_prime(bytes_data[:-2], checksum), "Checksum verification failed. Data may be corrupted."
     
     owner_id = int.from_bytes(owner_bytes, byteorder="big", signed=False)  # 2 bytes (4 pairs)

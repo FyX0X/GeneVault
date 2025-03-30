@@ -60,11 +60,8 @@ def suffix() -> str:
 def reedsolo_encode(data: bytes) -> str:
     """ Write the data to the ADN string."
     The data is Reed-Solomon encoded and then converted to DNA.
-    The data must be 80 nt (160 bits) long.
+    The data must be 108 nt (27 bytes) long.
     """
-    # Check if the data is 100 nt (200 bits) long
-    assert len(data) == DATA_SIZE, "Data must be 80 nt (160 bits) long."
-    assert isinstance(data, bytes), "Data must be of type bytes."
 
     # Encode data using Reed-Solomon
     encoded_data = rs.encode(data)
@@ -77,7 +74,6 @@ def checksum_prime(owner: bytes, file: bytes, index: bytes, encoded_data: bytes)
     """Calculate the checksum by dividing the data by the largest prime that fits in 2 bytes."""
     LARGEST_PRIME = 65521  # Largest prime number that fits in 2 bytes
     data = owner + file + index + encoded_data
-    print("checksum data:", data)
     
     # Calculate the checksum as the remainder of the sum of the data divided by the prime
     checksum_value = sum(data) % LARGEST_PRIME
