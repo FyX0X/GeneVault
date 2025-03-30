@@ -19,8 +19,8 @@ print("What file do you want to put in the time capsule ?")
 input_file = input("Path: ")
 print("Where do you want your encrypted file ?")
 output_file = input("Path: ")
-
-
+print("what is the name of your file ?")
+output = input("Name: ")
 print("Send us the .dna file and we will store it!")
 
 
