@@ -32,23 +32,22 @@ A Python-based software solution for encoding, encrypting, and storing data in D
 The project provides a command-line interface for storing and retrieving files using DNA encoding. Here's how to use it:
 
 ### First-Time Setup
-1. Run the program and select 'Y' when asked if you are a new user
+1. Run the program and select '--register' to create a new account.
 2. The system will generate an Owner ID and encryption key for you
 3. **IMPORTANT**: Save your Owner ID and encryption key securely - you'll need them to access your files later
 
 ### Storing Files (Write Mode)
-1. Run the program and select 'N' when asked if you are a new user
+1. Run the program and select '--write' or '-w' when asked for an action.
 2. Enter your Owner ID and encryption key when prompted
 3. Provide the path to the file you want to store
-4. Specify the output location and filename for the DNA-encoded file
-5. The system will:
+4. The system will:
    - Encrypt your file using AES-256 CBC mode
    - Convert the encrypted data into DNA sequences
    - Save the DNA sequences to the specified location
    - The file will be ready to be sent to the storage server
 
 ### Retrieving Files (Read Mode)
-1. Run the program and select 'N' when asked if you are a new user
+1. Run the program and select '--read' or 'r' when asked for an action.
 2. Enter your Owner ID and encryption key when prompted
 3. Provide the file ID of the file you want to retrieve
 4. Specify the output path where you want to save the decrypted file
@@ -72,7 +71,5 @@ The project provides a command-line interface for storing and retrieving files u
 - Maximum file size depends on the server's storage capacity
 
 ## Contributing
-
-
-Contributions are welcome! If you have any ideas, suggestions, or bug reports, please open an issue or submit a pull request.
+The Fork
 
