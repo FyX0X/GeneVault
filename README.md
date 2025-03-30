@@ -16,9 +16,14 @@ A Python-based software for encoding, encrypting, and storing data in DNA sequen
 - Automatically handles padding and initialization vectors (IV).
 - Simple and user-friendly interface.
 
-## installation 
-- installation of python
-- client side: need to install reedsolo
+## Installation
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yourusername/hackathon2025-dna-storage.git
+   cd hackathon2025-dna-storage
+   ```
+2. 
 
 ## Usage
 - store data in a secure and durable manner
