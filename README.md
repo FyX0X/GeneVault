@@ -6,9 +6,7 @@ A Python-based software for encoding, encrypting, and storing data in DNA sequen
 - [Features](#features)
 - [Installation](#installation)
 - [Usage](#usage)
-- [Examples](#examples)
 - [Contributing](#contributing)
-- [License](#license)
 
 ## Features
 - Encode data into DNA sequences for long-term storage.
@@ -17,3 +15,16 @@ A Python-based software for encoding, encrypting, and storing data in DNA sequen
 - Decrypt files securely with the same key.
 - Automatically handles padding and initialization vectors (IV).
 - Simple and user-friendly interface.
+
+## installation 
+- installation of python
+- client side: need to install reedsolo
+
+## Usage
+- store data in a secure and durable manner
+- hide data from your family
+- no acces at your data from our side 
+
+## Contributing
+- The Fork group
+- libraries: argparse,pycryptodome and reedsolo
