@@ -23,7 +23,8 @@ A Python-based software for encoding, encrypting, and storing data in DNA sequen
    git clone https://github.com/FyX0X/Hackaton.git
    ```
 2. Install the dependencies
-    ```pip install -r requirements.txt
+    ```bash
+    pip install -r requirements.txt
     ```
 
 ## Usage
