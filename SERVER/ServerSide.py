@@ -65,7 +65,6 @@ def handle_client(client_socket):
     elif action == "write":
         try: 
             if check_token(owner_id,token) is True:
-                file_count[owner_id] += 1
                 reponse = str(file_count[owner_id])
                 client_socket.sendall(str(file_count[owner_id]).encode())
                 file_path = f"SERVER/client_data/{owner_id}/{file_count[owner_id]}.dna"
@@ -75,6 +74,7 @@ def handle_client(client_socket):
                     f.write(file_data)
                 confirmation = "Ok"
                 client_socket.sendall(confirmation.encode())
+                file_count[owner_id] += 1
                 print("Writing successful !")
             else:
                 client_socket.sendall("Wrong token".encode())   
