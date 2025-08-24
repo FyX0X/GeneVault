@@ -20,7 +20,7 @@ A Python-based software solution for encoding, encrypting, and storing data in D
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/FyX0X/Hackaton.git
+   git clone https://github.com/FyX0X/GeneVault.git
    ```
 2. Install the required dependencies:
    ```bash
